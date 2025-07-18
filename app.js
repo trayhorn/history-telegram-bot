@@ -16,7 +16,7 @@ bot.onText(/\/start/, (msg) => {
   const chatId = msg.chat.id;
   bot.sendMessage(chatId, "What are we doing today?", {
 		reply_markup: {
-			keyboard: [["Schedule fact", "Cancel scheduling"], ["Random fact"]],
+			keyboard: [["Random fact"], ["Schedule fact", "Cancel scheduling"]],
 			one_time_keyboard: false,
 			is_persistent: true,
 		},
@@ -65,3 +65,11 @@ bot.onText(/^\s*Cancel scheduling\s*$/i, async (msg) => {
 		bot.sendMessage(chatId, "No scheduled task to cancel.");
 	}
 });
+
+bot.onText(/^\s*Random fact\s*$/i, async (msg) => {
+  const chatId = msg.chat.id;
+
+  const { data } = await axios.get("https://api.api-ninjas.com/v1/facts");
+  const response = data[0].fact;
+  bot.sendMessage(chatId, response);
+})
